@@ -47,7 +47,7 @@
 }
 
 #chat_area {
-  background-color: aqua;
+  /* background-color: aqua; */
 
   #disp_area {
     height: 80%;
@@ -58,16 +58,18 @@
       padding: 0;
     }
     ul li {
-      display: inline-block;
+      /* display: inline-block; */
       clear: both;
+      margin: 0 auto;
     }
     .message {
       background: #eee;
       padding: 10px;
-      display: inline-block;
+      /* display: inline-block; */
       border-radius: 30px;
       margin-bottom: 2px;
       max-width: 400px;
+      align-items: center
     }
   }
   #input_area textarea {
@@ -76,7 +78,7 @@
     margin-bottom: 6px;
     padding: 10px;
     box-sizing: border-box;
-    border: 0;
+    /* border: 0; */
     border-radius: 20px;
     font-family: inherit;
     outline: none;
