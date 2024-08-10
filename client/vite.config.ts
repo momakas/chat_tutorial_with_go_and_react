@@ -9,7 +9,3 @@ export default defineConfig({
   },
 })
 
-/// <reference types="vite/client" />
-interface ImortMetaEnv {
-  VITE_WS_PORT: string;
-}

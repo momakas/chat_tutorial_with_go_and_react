@@ -1,23 +1,27 @@
 package domain
 
+import (
+	"context"
+	"websocket/src/services"
+)
+
 type Hub struct {
 	Clients      map[*Client]bool
 	RegisterCh   chan *Client
 	UnRegisterCh chan *Client
 	BroadcastCh  chan []byte
-	// pubsub       *services.PubSubService
+	pubsub       *services.PubSubService
 }
 
 const broadCastChan = "broadcast"
 
-func NewHub() *Hub {
-	// func NewHub(pubsub *services.PubSubService) *Hub {
+func NewHub(pubsub *services.PubSubService) *Hub {
 	return &Hub{
 		Clients:      make(map[*Client]bool),
 		RegisterCh:   make(chan *Client),
 		UnRegisterCh: make(chan *Client),
 		BroadcastCh:  make(chan []byte),
-		// pubsub:       pubsub,
+		pubsub:       pubsub,
 	}
 }
 
@@ -31,23 +35,22 @@ func (h *Hub) RunLoop() {
 			h.unregister(client)
 
 		case msg := <-h.BroadcastCh:
-			h.broadCastToAllClient(msg)
-			// h.publishMessage(msg)
+			h.publishMessage(msg)
 		}
 	}
 }
 
-// func (h *Hub) SubscribeMessages() {
-// 	ch := h.pubsub.Subscribe(context.TODO(), broadCastChan)
+func (h *Hub) SubscribeMessages() {
+	ch := h.pubsub.Subscribe(context.TODO(), broadCastChan)
 
-// 	for msg := range ch {
-// 		h.broadCastToAllClient([]byte(msg.Payload))
-// 	}
-// }
+	for msg := range ch {
+		h.broadCastToAllClient([]byte(msg.Payload))
+	}
+}
 
-// func (h *Hub) publishMessage(msg []byte) {
-// 	h.pubsub.Publish(context.TODO(), broadCastChan, msg)
-// }
+func (h *Hub) publishMessage(msg []byte) {
+	h.pubsub.Publish(context.TODO(), broadCastChan, msg)
+}
 
 func (h *Hub) register(c *Client) {
 	h.Clients[c] = true

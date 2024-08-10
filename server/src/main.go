@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"websocket/src/domain"
 	"websocket/src/handlers"
+	"websocket/src/services"
 
 	// db接続
 	"database/sql"
@@ -33,10 +34,10 @@ func main() {
 	// }
 
 	// チャット
-	// pubsub := services.NewPubSubService()
-	hub := domain.NewHub()
-	// hub := domain.NewHub(pubsub)
-	// go hub.SubscribeMessages()
+	pubsub := services.NewPubSubService()
+	// hub := domain.NewHub()
+	hub := domain.NewHub(pubsub)
+	go hub.SubscribeMessages()
 	go hub.RunLoop()
 
 	http.HandleFunc("/ws", handlers.NewWebsocketHandler(hub).Handle)
